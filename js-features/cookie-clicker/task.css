@@ -1,0 +1,15 @@
+.clicker__cookie {
+  cursor: pointer;
+  width: 150px;
+  height: 150px;
+  transform-origin: 0 0;
+  object-fit: contain;
+  transition-timing-function: linear;
+  transition-duration: 0.08s;
+  transition-property: width, height;
+}
+
+.clicker__cookie.active {
+  width: 200px;
+  height: 200px;
+}
