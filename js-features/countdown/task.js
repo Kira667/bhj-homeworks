@@ -59,16 +59,3 @@ const timerId = setInterval(() => {
     }, 0);
   }
 }, 1000);
-
-// console.log(date.getHours());
-// console.log(date.getMinutes());
-// console.log(date.getSeconds());
-
-// const timerId = setInterval(() => {
-//   counter = counter - 1;
-//   nodeTimer.innerText = counter;
-//   if (counter === 0) {
-//     clearInterval(timerId);
-//     alert('Вы победили в конкурсе!');
-//   }
-// }, 1000);

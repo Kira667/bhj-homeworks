@@ -12,8 +12,7 @@ cookieNode.addEventListener("click", (event) => {
     speedClickNode.textContent = 'Кликайте дальше!';
   } else { // второй клик и дальше
     const currentClickDate = new Date();
-    const diffDate = compareDates(currentClickDate, prevClickDate)
-    const seconds = diffDate.seconds + diffDate.milliseconds / 1000;
+    const seconds = compareDateSeconds(currentClickDate, prevClickDate);
     speedClickNode.textContent = (1 / seconds).toFixed(2);
     prevClickDate = currentClickDate;
   }
@@ -32,16 +31,10 @@ function renderCount(count, node) {
   node.textContent = count;
 }
 
-function compareDates(date1, date2) {
-
+function compareDateSeconds(date1, date2) {
   const nextDate = date1 > date2 ? date1 : date2;
   const prevDate = date1 < date2 ? date1 : date2;
-
-  const diffTime = nextDate - prevDate;
-  const milliseconds = Math.floor(diffTime % 1000);
-  const seconds = Math.floor((diffTime / 1000) % 60);
-  const minutes = Math.floor((diffTime / (1000 * 60)) % 60);
-  const hours = Math.floor((diffTime / (1000 * 60 * 60)) % 24);
-
-  return {hours, minutes, seconds, milliseconds};
+  const diffTimeMilliSeconds = nextDate - prevDate;
+  const seconds = diffTimeMilliSeconds / 1000;
+  return seconds;
 }
