@@ -104,6 +104,7 @@ class Slider {
   }
 
   #insertChildIntoParent(child, parent) {
+    parent.innerText = '';
     parent.append(child);
   }
 
@@ -150,5 +151,5 @@ const images = [
   { url: 'https://i.postimg.cc/yNrtN8YD/istock-611295678.jpg', alt: 'картинка-5' }
 ];
 
-const slider1 = new Slider(images, '.slider', 3);
+const slider1 = new Slider(images, '.slider', 0);
 // console.log(slider1);
