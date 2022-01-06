@@ -32,12 +32,12 @@ class Slider {
     
     this.#node = document.querySelector(selector);
 
-    this.allNodes = this.#createSliderNode(images, activeIndex);
+    this.allNodes = this.#createAllNodesSlider(images, activeIndex);
     this.#insertChildIntoParent(this.allNodes.resultNode, this.#node);
 
   }
 
-  #createSliderNode(images, activeIndex) {
+  #createAllNodesSlider(images, activeIndex) {
     const resultNode = document.createElement('div');
 
     const sliderNavigationNode = this.#createNode('div', ['slider__navigation']);
