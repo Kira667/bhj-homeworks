@@ -1,9 +1,30 @@
 .rotator__case {
   display: none;
+  position: relative;
+  --percent: 0; /* от 0 до 1 */
+  --percentText: '';
 }
 
 .rotator__case_active {
-  display: inline;
+  display: inline-flex;
+  gap: 10px;
+}
+/* 
+.rotator__case::after {
+  content: var(--percentText);
+} */
+
+.rotator__case::before {
+  content: '';
+  position: absolute;
+  display: block;
+  width: 100%;
+  height: 2px;
+  background-color: red;
+  bottom: -2px;
+  left: 0;
+  transform-origin: left bottom;
+  transform: scaleX(var(--percent));
 }
 
 
