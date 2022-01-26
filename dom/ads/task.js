@@ -1,11 +1,12 @@
 class Rotator {
 
   #node = null;
-  #rotatorCaseActiveItem = {
-    node: null,
-    index: null,
-    dataItem: null
-  };
+  #rotatorCaseActiveItem = null;
+  #hoveredAudio = false;
+  #timeToEndAnimation = null;
+  #arrNodes = null;
+  #rotatorData = null;
+  #audio = new Audio();
 
   get node() {
     return this.#node; // это слайдер в дереве
@@ -35,10 +36,18 @@ class Rotator {
  * @param {string} selector селектор, куда вставим rotator
  */
   constructor(rotatorData, selector) {
-    this.#node = document.querySelector(selector);
-    const arrNodes = this.#createRotatorCaseArrNodes(rotatorData);
-    this.#insertChildIntoParent(arrNodes, this.#node);
-    this.#drawCycle(arrNodes, rotatorData);
+
+    try {
+
+      this.#node = document.querySelector(selector);
+      this.#arrNodes = this.#createRotatorCaseArrNodes(rotatorData);
+      this.#rotatorData = rotatorData;
+      this.#insertChildIntoParent(this.#arrNodes, this.#node);
+      this.#drawCycle(this.#arrNodes, rotatorData, null);
+
+    } catch(err) {
+      console.error(err);
+    }
   }
 
 /**
@@ -71,6 +80,10 @@ class Rotator {
       rotatorCaseNode.textContent = rotatorData[i].text;
 
     }
+
+    if (this.#rotatorCaseActiveItem === null) {
+      throw new Error('необходимо передавать в массиве один объект с ключом "active"');
+    }
     
     return rotatorCaseArrNodes;
   }
@@ -89,11 +102,11 @@ class Rotator {
 
     rotatorCaseNode.classList.add(this.rotatorCaseActiveClass);
     rotatorCaseNode.textContent = rotatorDataItem.text;
-    rotatorCaseNode.style.color = rotatorDataItem.color;
+    rotatorCaseNode.style.setProperty('--color', rotatorDataItem.color);
     this.#rotatorCaseActiveItem = {
-        node: rotatorCaseNode,
-        index: index,
-        dataItem: rotatorDataItem
+      node: rotatorCaseNode,
+      index: index,
+      dataItem: rotatorDataItem
     };
 
   }
@@ -113,23 +126,17 @@ class Rotator {
     }
   }
 
-  #drawCycle(arrNodes, rotatorData) { // цикл отрисовки слов
-    // const activeItem = this.#rotatorCaseActiveItem;
-    // console.log(activeItem);
-    // setTimeout(() => {
-    //   this.#nextActiveItem(arrNodes, rotatorData);
-    //   this.#drawCycle(arrNodes, rotatorData);
-    // }, activeItem.dataItem.speed);
-
+  #drawCycle(arrNodes, rotatorData, duration = null) { // цикл отрисовки слов
     const activeItem = this.#rotatorCaseActiveItem;
-    const dataItemSpeed = activeItem.dataItem.speed;
+    const dataItemSpeed = duration === null ? activeItem.dataItem.speed : duration; // если duration === null, то выбрать время из activeItem, иначе взять время duration
     const activeItemNode = activeItem.node;
-  
     let prescenceAudio = false;    
 
     if ('audio' in activeItem.dataItem) {
       prescenceAudio = true;
-      activeItemNode.addEventListener('mousemove', this.#eventHoverRotatorCase);
+      activeItemNode.onmouseover = this.#eventMouseOverRotatorCase.bind(this);
+      activeItemNode.onmouseout = this.#eventMouseOutRotatorCase.bind(this);
+      activeItemNode.onclick = this.#eventMouseClickRotatorCase.bind(this);
     }
 
     animate({
@@ -137,20 +144,23 @@ class Rotator {
         return timeFraction;
       },
       duration: dataItemSpeed,
-      draw: (progress, currentTime) => {
+      draw: (progress, currentTime, timeToEnd) => {
         
+        if (this.#hoveredAudio) { // если наведено на аудио
+          this.#timeToEndAnimation = timeToEnd;
+          return false;
+        }
+
+        if (progress === 1) {
+          this.#nextActiveItem(arrNodes, rotatorData);
+          this.#drawCycle(arrNodes, rotatorData, null);
+        }
+
         this.#setPercentInRotatorCaseNode(activeItemNode, progress);
         
         return true;
       },
-      finallyDraw: (progress, currentTime) => {
-
-        if (prescenceAudio === true) {
-          activeItemNode.removeEventListener('mousemove', this.#eventHoverRotatorCase);
-        }
-
-        this.#nextActiveItem(arrNodes, rotatorData);
-        this.#drawCycle(arrNodes, rotatorData);
+      finallyDraw: (progress, currentTime, timeToEnd) => {
       }
     });
 
@@ -162,20 +172,48 @@ class Rotator {
     node.style.setProperty('--percentText', JSON.stringify(`${percentRound} %`));
   }
 
-  #eventHoverRotatorCase = (event) => {
-    console.log('наведение на аудио');
-
+  #eventMouseOverRotatorCase(event) {
+    
+    this.#hoveredAudio = true;
   };
+
+  #eventMouseOutRotatorCase(event) {
+    this.#hoveredAudio = false;
+    const srcAudio = this.#rotatorCaseActiveItem.dataItem.audio;
+    this.#stopAudio(srcAudio);
+    this.#drawCycle(this.#arrNodes, this.#rotatorData, this.#timeToEndAnimation);
+  };
+
+  #eventMouseClickRotatorCase(event) {
+    console.log(this);
+    const srcAudio = this.#rotatorCaseActiveItem.dataItem.audio;
+    this.#playAudio(srcAudio);
+  }
+
+  #playAudio(src) {
+    this.#audio.muted = true;
+    this.#audio.pause();
+    this.#audio.src = src;
+    this.#audio.currentTime = 0;
+    this.#audio.play();
+    this.#audio.muted = false;
+  }
+
+  #stopAudio(src) {
+    this.#audio.pause();
+    this.#audio.muted = true;
+    this.#audio.currentTime = 0;
+  }
 
 }
 
 const rotatorData = [
-  { speed: 2000, color: 'blue', text: 'Бог JS', active: true },
-  { speed: 2000, color: 'green', text: 'Бог JS' },
-  { speed: 2000, color: 'tomato', text: 'Бог JS' },
-  { speed: 2000, color: 'cyan', text: 'Бог JS' },
+  { speed: 1000, color: 'blue', text: 'Бог JS', active: true },
+  { speed: 2000, color: 'green', text: 'Лучший программист на земле' },
+  { speed: 1000, color: 'tomato', text: 'покорю этот мир' },
+  { speed: 1000, color: 'cyan', text: 'учусь в Нетологии' },
   { speed: 5000, color: 'red', text: 'счастливый как никто', audio: 'ya_schastliviy.mp3' },
-  { speed: 2000, color: 'orange', text: 'Бог JS' }
+  { speed: 1000, color: 'red', text: 'радуюсь жизни' },
 ];
 
 const rotator = new Rotator(rotatorData, '.rotator');
@@ -192,13 +230,15 @@ function animate({timing, draw, duration, finallyDraw}) {
     let timeFraction = currentTime / duration;
     if (timeFraction > 1) timeFraction = 1;
 
+    const timeToEnd = duration - currentTime;
+
     // вычисление текущего состояния анимации
     let progress = timing(timeFraction);
 
-    const drawBoolean = draw(progress, currentTime); // отрисовать её
+    const drawBoolean = draw(progress, currentTime, timeToEnd); // отрисовать её
 
     if (drawBoolean === false || timeFraction === 1) {
-      finallyDraw(progress, currentTime);
+      finallyDraw(progress, currentTime, timeToEnd);
     }
 
     if (timeFraction < 1 && drawBoolean === true) {
@@ -206,23 +246,4 @@ function animate({timing, draw, duration, finallyDraw}) {
     }
   });
 }
-
-// let start = null;
-// const element = document.getElementById('superId');
-
-// function step(timestamp) {
-  
-//   if (start === null) {
-//     start = timestamp;
-//   };
-//   const progress = timestamp - start;
-//   console.log(progress);
-//   element.style.transform = 'translateX(' + progress / 10 + 'px)';
-//   if (progress < 2000) {
-//     requestAnimationFrame(step);
-//   }
-
-// }
-
-// requestAnimationFrame(step);
 

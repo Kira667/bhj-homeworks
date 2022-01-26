@@ -1,18 +1,21 @@
 .rotator__case {
-  display: none;
-  position: relative;
   --percent: 0; /* от 0 до 1 */
   --percentText: '';
+  --color: inherit;
+  display: none;
+  position: relative;
+  color: var(--color);
+  padding-right: var(--paddingRight);
 }
 
 .rotator__case_active {
   display: inline-flex;
   gap: 10px;
 }
-/* 
-.rotator__case::after {
-  content: var(--percentText);
-} */
+
+.rotator__case_active[data-audio] {
+  cursor: pointer;
+}
 
 .rotator__case::before {
   content: '';
@@ -20,11 +23,31 @@
   display: block;
   width: 100%;
   height: 2px;
-  background-color: red;
+  background-color: var(--color);
   bottom: -2px;
   left: 0;
   transform-origin: left bottom;
   transform: scaleX(var(--percent));
 }
 
+.rotator__case::after {
+  content: 'Кликни на меня, не убирай мышку!';
+  display: block;
+  color: black;
+  background-color: white;
+  border: 2px solid black;
+  font-size: 12px;
+  padding: 10px;
+  width: 100px;
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  visibility: hidden;
+  opacity: 0;
+}
 
+.rotator__case_active[data-audio]::after {
+  visibility: visible;
+  opacity: 1;
+}
