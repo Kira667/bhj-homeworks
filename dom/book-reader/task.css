@@ -3,15 +3,15 @@ body {
 }
 
 .bg_color_black {
-  background: #000;
+  background-color: #000;
 }
 
 .bg_color_gray {
-  background: grey;
+  background-color: grey;
 }
 
 .bg_color_white {
-  background: white;
+  background-color: white;
 }
 
 .book_fs-big {
@@ -35,19 +35,19 @@ body {
 }
 
 .book_bg-gray {
-  background: grey;
+  background-color: grey;
 }
 
 .book_bg-black {
-  background: black;
+  background-color: black;
 }
 
 .book_bg-white {
-  background: white;
+  background-color: white;
 }
 
 .book__controls {
-  background: rgb(63, 63, 63);
+  background-color: rgb(63, 63, 63);
   padding: 10px;
   box-sizing: border-box;
   display: flex;
@@ -70,11 +70,14 @@ body {
   border-radius: 4px;
   margin-left: 5px;
   box-sizing: border-box;
+  border: 1px solid transparent;
+  transition: box-shadow 0.2s ease-in-out,
+              border-color 0.2s ease-in-out;
 }
 
 .color_active {
   box-shadow: 0 0 5px white;
-  border: 1px solid gray;
+  border-color: gray;
 }
 
 .font-size {
@@ -92,6 +95,9 @@ body {
   display: inline-flex;
   justify-content: center;
   align-items: center;
+  border: 1px solid transparent;
+  border-radius: 50%;
+  transition: border-color 0.2s ease-in-out;
 }
 
 .font-size_small {
@@ -103,12 +109,14 @@ body {
 }
 
 .font-size_active {
-  border: 1px solid whitesmoke;
-  border-radius: 50%;
+  border-color: whitesmoke;
 }
 
 .book {
   font-family: Georgia;
+  transition-duration: 0.2s;
+  transition-timing-function: ease-in-out;
+  transition-property: font-size, color, background-color;
 }
 
 .book__content {
@@ -121,13 +129,13 @@ body {
 }
 
 .text_color_black {
-  background: #000;
+  background-color: #000;
 }
 
 .text_color_gray {
-  background: grey;
+  background-color: grey;
 }
 
 .text_color_whitesmoke {
-  background: whitesmoke;
+  background-color: whitesmoke;
 }
