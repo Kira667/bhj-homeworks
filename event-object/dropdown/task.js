@@ -2,7 +2,7 @@ NodeList.prototype.addEventListener = function(type, listener, options = false) 
   for (let i = 0; i < this.length; i++) {
     this[i].addEventListener(type, listener, options);
   }
-};
+};0
 
 const dropdownNodes = document.querySelectorAll('.dropdown__item');
 const dropdownValueNode = document.querySelector('.dropdown__value');

@@ -1,4 +1,30 @@
 class Game {
+
+  /** 
+   * @type {Element}
+   */
+  container = null;
+  
+  /** 
+   * @type {Element}
+   */
+  wordElement = null;
+
+  /** 
+   * @type {Element}
+   */
+  winsElement = null;
+
+  /** 
+   * @type {Element}
+   */
+  lossElement = null;
+
+  /** 
+   * @type {string}
+   */
+  currentSymbol = null;
+
   constructor(container) {
     this.container = container;
     this.wordElement = container.querySelector('.word');
@@ -17,6 +43,27 @@ class Game {
   }
 
   registerEvents() {
+
+    window.addEventListener('keypress', (event) => {
+
+      /** 
+       * @type {string}
+       */
+      const keyCurrentSymbolNode = this.currentSymbol.innerText.toLowerCase();
+      const keyKeyboard = event.key.toLowerCase();
+
+      console.log(keyCurrentSymbolNode, 'keyCurrentSymbolNode');
+      console.log(keyKeyboard, 'keyKeyboard');
+
+      console.log(keyCurrentSymbolNode === keyKeyboard);
+      if (keyCurrentSymbolNode === keyKeyboard) {
+        this.success();
+      } else {
+        this.fail();
+      }
+
+    });
+
     /*
       TODO:
       Написать обработчик события, который откликается
@@ -34,8 +81,10 @@ class Game {
     }
 
     if (++this.winsElement.textContent === 10) {
-      alert('Победа!');
-      this.reset();
+      setTimeout(() => {
+        alert('Победа');
+        this.reset();
+      }, 0);
     }
     this.setNewWord();
   }
@@ -56,17 +105,18 @@ class Game {
 
   getWord() {
     const words = [
-        'bob',
-        'awesome',
-        'netology',
-        'hello',
-        'kitty',
-        'rock',
-        'youtube',
-        'popcorn',
-        'cinema',
-        'love',
-        'javascript'
+        'Я big baby',
+        // 'bob',
+        // 'awesome',
+        // 'netology',
+        // 'hello',
+        // 'kitty',
+        // 'rock',
+        // 'youtube',
+        // 'popcorn',
+        // 'cinema',
+        // 'love',
+        // 'javascript'
       ],
       index = Math.floor(Math.random() * words.length);
 
