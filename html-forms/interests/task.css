@@ -1,5 +1,6 @@
 .interests {
   display: none;
+	user-select: none;
 }
 
 .interests_main {
@@ -8,4 +9,9 @@
 
 .interests_active {
   display: block;
+}
+
+input {
+	border: 0px;
+	outline: 0 !important;
 }
