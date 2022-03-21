@@ -1,3 +1,7 @@
+body {
+	position: relative;
+}
+
 .header {
   margin-bottom: 20px;
 }
@@ -12,7 +16,7 @@
 }
 
 .tooltip {
-  position: fixed;
+  position: absolute;
   display: none;
   background: black;
   padding: 5px;
