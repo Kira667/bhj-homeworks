@@ -1,15 +1,33 @@
-const modalMain = document.querySelector('#modal_main');
-const modalMainCloseBtn = modalMain.querySelector('.modal__close');
-const modalMainShowSuccessBtn = modalMain.querySelector('.show-success');
-const modalSuccess = document.querySelector("#modal_success");
+const modalMainNode = document.querySelector('#modal_main');
+const modalSuccessNode = document.querySelector('#modal_success');
+const modalMainInfo = getChildNodes(modalMainNode);
+const modalSuccessInfo = getChildNodes(modalSuccessNode);
 
+modalMainInfo.modalNode.classList.add('modal_active');
 
-modalMain.classList.add('modal_active');
-
-modalMainCloseBtn.addEventListener('click', (e) => {
-  modalMain.classList.remove('modal_active');
+modalMainInfo.btnContentNode.addEventListener('click', (e) => {
+	modalMainInfo.modalNode.classList.remove('modal_active');
+	modalSuccessInfo.modalNode.classList.add('modal_active');
 });
 
-modalMainShowSuccessBtn.addEventListener('click', (e) => {
-  modalSuccess.classList.add('modal_active');
+modalMainInfo.btnCloseNode.addEventListener('click', (e) => {
+	modalMainInfo.modalNode.classList.remove('modal_active');
 });
+
+modalSuccessInfo.btnCloseNode.addEventListener('click', (e) => {
+	modalSuccessInfo.modalNode.classList.remove('modal_active');
+});
+
+modalSuccessInfo.btnContentNode.addEventListener('click', (e) => {
+	modalSuccessInfo.modalNode.classList.remove('modal_active');
+});
+
+
+
+function getChildNodes(modalNode) {
+	return {
+		modalNode: modalNode,
+		btnContentNode: modalNode.querySelector('.btn'),
+		btnCloseNode: modalNode.querySelector('.modal__close_times')
+	};
+}
