@@ -1,22 +1,29 @@
 body {
-  font-family: Arial;
+	font-family: Arial;
 }
+
 .item {
-  display: flex;
+	display: flex;
 }
 
 .item__code {
-  margin-right: 5px;
-  font-weight: bold;
+	margin-right: 5px;
+	font-weight: bold;
 }
+
 .item__value {
-  margin-right: 5px;
+	margin-right: 5px;
 }
 
 .loader {
-  width: 100px;
-  display: none;
+	width: 100px;
+	display: none;
 }
+
 .loader_active {
-  display: block;
+	display: block;
+}
+
+.loader_hidden {
+	display: none;
 }
