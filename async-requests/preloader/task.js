@@ -9,15 +9,7 @@ function getValutes() {
 	});
 }
 
-const itemsNode = document.querySelector('#items');
-const loaderNode = document.querySelector('#loader');
-
-getValutes()
-.then(res => {
-	startListValutes(res.response, itemsNode, loaderNode);
-});
-
-function startListValutes(data, itemsNode, loaderNode) {
+function renderListValutes(data, itemsNode, loaderNode) {
 	const valutesObj = data.Valute;
 
 	loaderNode.classList.add('loader_hidden');
@@ -51,6 +43,28 @@ function createItemNode(valutesObjItem) {
 	return itemNode;
 }
 
-// .then((res) => {
-// 	console.log(res);
-// });
+function initLocalStorage(itemsNode, loaderNode) {
+	const dataLocalStorage = localStorage.getItem('data');
+
+	if (dataLocalStorage !== null) { // если в локальном хранилище не пусто
+
+		const data = JSON.parse(dataLocalStorage);
+		renderListValutes(data, itemsNode, loaderNode);
+
+	} else { // если в локальном хранилище пусто
+
+		getValutes()
+		.then(res => {
+			const data = res.response;
+			localStorage.setItem('data', JSON.stringify(data));
+			renderListValutes(data, itemsNode, loaderNode);
+		});
+
+	}
+
+}
+
+const itemsNode = document.querySelector('#items');
+const loaderNode = document.querySelector('#loader');
+
+initLocalStorage(itemsNode, loaderNode);
