@@ -7,5 +7,15 @@ body {
 }
 
 .poll__title {
-  margin-bottom: 20px;
+	margin-bottom: 20px;
+}
+
+.poll__answers {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+}
+
+.poll__answer {
+	margin: 0;
 }
