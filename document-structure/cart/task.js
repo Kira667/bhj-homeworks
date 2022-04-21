@@ -2,8 +2,7 @@ const productNodes = Array.from(document.querySelectorAll('.product'));
 const productObjArr = productNodes.map(getProductChildNodes);
 const cartProductsNode = document.querySelector('.cart__products');
 
-const cart = [
-];
+const cartMap = new Map();
 
 
 for (const productObj of productObjArr) {
@@ -24,16 +23,15 @@ for (const productObj of productObjArr) {
 	})
 
 	productObj.addNode.addEventListener('click', (e) => {
-		const count = productObj.value;
-		const imgSrc = productObj.imageNode.src;
-		const id = productObj.id;
 
 		addProductToCart({
 			id: productObj.id,
 			imgSrc: productObj.imageNode.src,
 			count: productObj.value,
-			cart: cart
+			cartMap: cartMap,
+			cartProductsNode: cartProductsNode
 		});
+
 	});
 
 }
@@ -56,40 +54,26 @@ function setCountToCartProductNode(cartProductNode, count) {
 	cartProductCountNode.textContent = count;
 }
 
-function addProductToCart({id, imgSrc, count, cart}) {
-	const cartFindIdx = cart.findIndex(item => item.id === id);
+function addProductToCart({id, imgSrc, count, cartMap, cartProductsNode}) {
 
-	if (cartFindIdx === -1) { // элемента нету в массиве
-		const cartProductNode = createCartProductNode(id, imgSrc, count);
-		cart.push({
-			id: id,
-			cartProductNode: cartProductNode,
-			count: count
-		});
-		cartProductsNode.append(cartProductNode);
-	} else { // элемент есть в массиве
-		const cartProductObj = cart[cartFindIdx];
+	if (cartMap.get(id)) { // такой элемент существует в структуре Map
+		const cartProductObj = cartMap.get(id);
 		const cartProductNode = cartProductObj.cartProductNode;
 		const lastCount = cartProductObj.count;
 		const newCount = lastCount + count;
 		cartProductObj.count = newCount;
 		setCountToCartProductNode(cartProductNode, newCount);
+	} else { // элемента нету в структуре Map
+		const cartProductNode = createCartProductNode(id, imgSrc, count);
+		const cartItemObj = {
+			id: id,
+			cartProductNode: cartProductNode,
+			count: count
+		};
+		cartMap.set(id, cartItemObj);
+		cartProductsNode.append(cartProductNode);
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 function getProductChildNodes(productNode) {
 
