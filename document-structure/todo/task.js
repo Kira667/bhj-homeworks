@@ -2,9 +2,9 @@ const tasksFormNode = document.querySelector('#tasks__form');
 const taskInputNode = document.querySelector('#task__input');
 const tasksListNode = document.querySelector('#tasks__list');
 
-
-
 tasksFormNode.addEventListener('submit', (e) => {
+	e.preventDefault();
+
 	const taskNode = document.createElement('div');
 	taskNode.classList.add('task');
 
@@ -23,6 +23,7 @@ tasksFormNode.addEventListener('submit', (e) => {
 
 	tasksListNode.prepend(taskNode);
 
+	taskInputNode.value = '';
 });
 
 function deleteNode(event) {
