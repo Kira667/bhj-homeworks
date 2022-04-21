@@ -9,6 +9,7 @@ body {
 .has-tooltip {
   color: #000;
   background: yellow;
+	display: inline-block;
 }
 
 .has-tooltip:hover {
@@ -17,13 +18,14 @@ body {
 
 .tooltip {
   position: absolute;
-  display: none;
+  display: block;
   background: black;
   padding: 5px;
   border-radius: 5px;
   color: #fff;
+	opacity: 0;
 }
 
 .tooltip_active {
-  display: block;
+  opacity: 1;
 }
